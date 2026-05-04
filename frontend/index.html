@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>User App</h2>
+
+<input id="name" placeholder="Enter name">
+<button onclick="addUser()">Add</button>
+
+<ul id="list"></ul>
+
+<script>
+const API = "http://localhost:5000/users";
+
+async function loadUsers() {
+  const res = await fetch(API);
+  const data = await res.json();
+  document.getElementById("list").innerHTML =
+    data.map(u => `<li>${u.name}</li>`).join("");
+}
+
+async function addUser() {
+  const name = document.getElementById("name").value;
+  await fetch(API, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ name })
+  });
+  loadUsers();
+}
+
+loadUsers();
+</script>
+
+</body>
+</html>
